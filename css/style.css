@@ -4,3 +4,6 @@
 .centered{
   text-align: center;
 }
+.inline{
+  display: inline;
+}
