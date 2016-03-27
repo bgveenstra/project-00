@@ -4,35 +4,55 @@ $(document).on('ready', function() {
 
   //self-building player objects
   var playersArr = [];
-  var boardLength = 7;
-  var countPlayers = 2;
-  numPlayers(countPlayers); //put input here
+  var boardLength = 7;//put input here
+  var countPlayers = 2;//put input here
+
+  numPlayers(countPlayers);
+
+
   function numPlayers(num){
-    for(s = 0; s < num; s++){
+    var not = 1;
+    for(var s = 0; s < num; s++){
       //setting into an array, since you cannot directly alter a var
-      playersArr[s] = new Player(randString(), randString(), randString(), s);
+      playersArr[s] = new Player(randString(), randString(), randString(), not);
+      not++;
     }
     //console.log(playersArr);
   }
+
+  //generates random Avater, player image
+  function randAvatar(input){
+    //can hard code in playerbuild for loop
+    //api to search spotify album covers for avater
+  }
+
+  //generates random token
+  function randToken(){
+    //can hard code in player for loop
+  }
+
   //setting up random strings, to pass on as div identifiers and selectors
   function randString(){
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-    for( var i=0; i < 5; i++ )
+    for( var i = 0; i < 5; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
-
     return text;
   }
 
-  function setUpBoard(){
+  //building the players automatically from the array
+  function setUpGame(){
     for (var q = 0; q < countPlayers; q++){
       console.log(playersArr[q]);
       playmouth = playersArr[q].buildRow();
     }
     return playmouth;
   }
-setUpBoard();
+
+//this is where it all starts!!!!
+setUpGame();
+
   //truning the array of objects, into objects with different names
   //playersArr.forEach(function (element, index){
   //  element = player+index;
@@ -47,39 +67,47 @@ setUpBoard();
   //player1.buildString();
   //player2.buildString();
 
-  //big constructor, to handle all functions per object
+  //big constructor, to handle all functions per object/player
   function Player(color, letter, counter, playerPos) {
     this.playerColor = color;
     this.playerLetter = letter;
     //building the board automatically
     this.buildRow = function (){
                           //for(r = 0; r < 2; r++){
-                          $('#board').append('<div class="'+this.playerColor+'">player: ' + playerPos + '</div>');
+                          $('#board').append('<div class="green '+this.playerColor+'"><img class="avatar" src=https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/8/005/079/233/062b1d4.jpg> ' + playerPos + '</div>');
                           //}//for
                           this.buildString();
                           this.keyStroke();
                     };//buildRow
     this.buildString = function (){
-                            for(i = 0; i < boardLength; i++){
-                              $('.'+this.playerColor).append('<div class="inline ' + this.playerLetter + '" id="' + letter + i + '"> </div>');
+                            for(var t = 0; t < boardLength; t++){
+                              $('.'+this.playerColor).append('<div class="inline ' + this.playerLetter + '" id="' + letter + t + '"> </div>');
                             }//for
                         };//buildString
-    //building the key automatiaclly
+    //building the keypress automatiaclly
     this.keyStroke = function (){
                         //console.log("The call is coming from inside the function!");
-                         var counter = 0;
+                         var counter = 1;
                          $(window).on("keypress", function handleKeypress(event) {
-                           if(counter === boardLength){
-                             alert(color);
-                             //reset board
-                           }
-                           if(event.keyCode === (48 + playerPos)){
+                           if(event.keyCode === (47 + playerPos)){
+                             if(counter === boardLength){
+                               alert(color);
+                               //$('#board').remove();
+                               $('.inline').empty();
+                               //$('.inline').remove();
+                               counter = 1;
+                               //playersArr = [];
+                               //letter = '';
+                               //numPlayers(countPlayers);
+                               //setUpGame();
+                             }else{
                              //$('#a' + count).append("b");
                              //$('#' + this.playerLetter + (count - 1)).empty();
                              $('#' + letter + counter).append(letter);
-                             $('#' + letter + counter - 1).text(" ");
+                             //$('#' + letter + counter - 1).text(" ");
                              console.log('#' + letter + counter);
                              counter++;
+                           }
                            }//if
                          });//keypress
                       };
