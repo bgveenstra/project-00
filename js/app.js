@@ -53,6 +53,14 @@ $(document).on('ready', function() {
 //this is where it all starts!!!!
 setUpGame();
 
+  function numSpaces(){
+    var spaces = '';
+    for( a = 0; a < boardLength; a++){
+      spaces = spaces + '/';
+    }
+    return spaces;
+  }
+
   //truning the array of objects, into objects with different names
   //playersArr.forEach(function (element, index){
   //  element = player+index;
@@ -74,47 +82,55 @@ setUpGame();
     //building the board automatically
     this.buildRow = function (){
                           //for(r = 0; r < 2; r++){
-                          $('#board').append('<div class="green '+this.playerColor+'"><img class="avatar" src=https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/8/005/079/233/062b1d4.jpg> ' + playerPos + '</div>');
+                          $('#board').append('<div class="size '+this.playerColor+
+                            '"><img class="avatar" src=https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/8/005/079/233/062b1d4.jpg> ' +
+                            playerPos + '</div>');
                           //}//for
                           this.buildString();
                           this.keyStroke();
                     };//buildRow
     this.buildString = function (){
                             for(var t = 0; t < boardLength; t++){
-                              $('.'+this.playerColor).append('<div class="inline ' + this.playerLetter + '" id="' + letter + t + '"> </div>');
+                              $('.'+this.playerColor).append('<div class="inline clear ' +
+                                this.playerLetter + '" id="' + letter + t + '">_</div>');
                             }//for
+                            //finish line
+                            $('.'+this.playerColor).append('<div class="inline">|</div>');
                         };//buildString
     //building the keypress automatiaclly
     this.keyStroke = function (){
                         //console.log("The call is coming from inside the function!");
-                         var counter = 1;
+                         var counter = 0;
                          $(window).on("keypress", function handleKeypress(event) {
                            if(event.keyCode === (47 + playerPos)){
-                             if(counter === boardLength){
+                             if(counter === (boardLength-1)){
+                               $('#' + letter + counter).text(".");
+                               $('#' + letter + (counter-1)).text("_");
                                alert(color);
                                //$('#board').remove();
-                               $('.inline').empty();
+                               $('.clear').text("_");
                                //$('.inline').remove();
-                               counter = 1;
+                               counter = 0;
                                //playersArr = [];
                                //letter = '';
                                //numPlayers(countPlayers);
                                //setUpGame();
                              }else{
-                             //$('#a' + count).append("b");
-                             //$('#' + this.playerLetter + (count - 1)).empty();
-                             $('#' + letter + counter).append(letter);
-                             //$('#' + letter + counter - 1).text(" ");
-                             console.log('#' + letter + counter);
-                             counter++;
-                           }
-                           }//if
+                               //$('#a' + count).append("b");
+                               //$('#' + this.playerLetter + (count - 1)).empty();
+                               $('#' + letter + counter).text(".");
+                               $('#' + letter + (counter-1)).text("_");
+                               //$('#' + letter + counter - 1).text(" ");
+                               console.log('#' + letter + counter);
+                               counter++;
+                             }
+                           }//if key code
                          });//keypress
                       };
     this.movement = function() {
 
                     };//movement
-  }//player
+  }//Player
 
   // var count = 0;
   // $(window).on("keypress", function handleKeypress(event) {
