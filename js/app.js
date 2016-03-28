@@ -6,19 +6,23 @@ $(document).on('ready', function() {
   var playersArr = [];
   var boardLength = 7;//put input here
   var countPlayers = 2;//put input here
+  var Nums = 0;
 
   numPlayers(countPlayers);
 
 
   function numPlayers(num){
-    var not = 1;
+    var playerNum = 1;
     for(var s = 0; s < num; s++){
       //setting into an array, since you cannot directly alter a var
-      playersArr[s] = new Player(randString(), randString(), randString(), not);
-      not++;
+      playersArr[s] = new Player(randString(), randString(), playerNum, Nums);
+      playerNum++;
     }
     //console.log(playersArr);
   }
+
+  //reset keypress counter for each player (set marker back to start position)
+
 
   //generates random Avater, player image
   function randAvatar(input){
@@ -62,9 +66,9 @@ setUpGame();
   }
 
   //truning the array of objects, into objects with different names
-  //playersArr.forEach(function (element, index){
-  //  element = player+index;
-  //});
+  // playersArr.forEach(function (element, index){
+  //  var player+index = element;
+  // });
 
   //sample hard coded player objects
   //player1 = new Player("blue", "a", "count", 1);
@@ -74,11 +78,19 @@ setUpGame();
 //playersArr[2].buildRow();
   //player1.buildString();
   //player2.buildString();
+  function resetKeypress(nums){
+    for(var z = 0; z < nums; z ++){
+      playersArr[z].keyStroke(0);
+      console.log(playersArr[z]);
+    }
+    console.log(playersArr);
+  }
 
   //big constructor, to handle all functions per object/player
-  function Player(color, letter, counter, playerPos) {
+  function Player(color, letter, playerPos, lpressNum) {
     this.playerColor = color;
     this.playerLetter = letter;
+    //this.pressNum = Nums;
     //building the board automatically
     this.buildRow = function (){
                           //for(r = 0; r < 2; r++){
@@ -87,7 +99,7 @@ setUpGame();
                             playerPos + '</div>');
                           //}//for
                           this.buildString();
-                          this.keyStroke();
+                          this.keyStroke(0);
                     };//buildRow
     this.buildString = function (){
                             for(var t = 0; t < boardLength; t++){
@@ -97,36 +109,51 @@ setUpGame();
                             //finish line
                             $('.'+this.playerColor).append('<div class="inline">|</div>');
                         };//buildString
+
     //building the keypress automatiaclly
-    this.keyStroke = function (){
+    this.keyStroke = function key(pressNum){
                         //console.log("The call is coming from inside the function!");
-                         var counter = 0;
-                         $(window).on("keypress", function handleKeypress(event) {
-                           if(event.keyCode === (47 + playerPos)){
-                             if(counter === (boardLength-1)){
-                               $('#' + letter + counter).text(".");
-                               $('#' + letter + (counter-1)).text("_");
-                               alert(color);
-                               //$('#board').remove();
-                               $('.clear').text("_");
-                               //$('.inline').remove();
-                               counter = 0;
-                               //playersArr = [];
-                               //letter = '';
-                               //numPlayers(countPlayers);
-                               //setUpGame();
-                             }else{
-                               //$('#a' + count).append("b");
-                               //$('#' + this.playerLetter + (count - 1)).empty();
-                               $('#' + letter + counter).text(".");
-                               $('#' + letter + (counter-1)).text("_");
-                               //$('#' + letter + counter - 1).text(" ");
-                               console.log('#' + letter + counter);
-                               counter++;
-                             }
-                           }//if key code
-                         });//keypress
+                        //var counter = 0;
+                        //var not = keyPressNum;
+                        //var n = 0;
+                        //var pressNum = n;
+                        $(window).on("keypress", function handleKeypress(event) {
+                          if(event.keyCode === (47 + playerPos)){
+                            if(pressNum === (boardLength-1)){
+                              $('#' + letter + pressNum).text(".");
+                              $('#' + letter + (pressNum-1)).text("_");
+                              console.log(pressNum);
+                              alert('player' + playerPos + ' has won!');
+                              //$('#board').remove();
+                              //$('.inline').remove();
+                              //resetKeypress(countPlayers);
+                              //keyPressNum = 0;
+                              $('.clear').text("_");
+                              //$('#board').empty();
+                              pressNum = 0;
+                              //key(0);
+                              //setUpGame();
+                              // console.log(pressNum);
+                              // console.log(playersArr[1].pressNum);
+                              //resetKeypress(countPlayers);
+                              //playersArr = [];
+                              //letter = '';
+                              //numPlayers(countPlayers);
+                              //setUpGame();
+                            }else{
+                              //$('#a' + count).append("b");
+                              //$('#' + this.playerLetter + (count - 1)).empty();
+                              $('#' + letter + pressNum).text(".");
+                              $('#' + letter + (pressNum-1)).text("_");
+                              //$('#' + letter + counter - 1).text(" ");
+                              console.log('#' + letter + pressNum);
+                              pressNum++;
+                            }
+                            //pressNum = 0;
+                          }//if key code
+                        });//keypress
                       };
+
     this.movement = function() {
 
                     };//movement
