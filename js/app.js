@@ -5,7 +5,7 @@ $(document).on('ready', function() {
   //self-building player objects
   var playersArr = [];
   var boardLength = 7;//put input here
-  var countPlayers = 2;//put input here
+  var countPlayers = 5;//put input here
   var Nums = 0;
 
   numPlayers(countPlayers);
@@ -95,7 +95,7 @@ setUpGame();
     this.buildRow = function (){
                           //for(r = 0; r < 2; r++){
                           $('#board').append('<div class="size '+this.playerColor+
-                            '"><img class="avatar" src=https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/8/005/079/233/062b1d4.jpg> ' +
+                            '"><img class="avatar" id="' + this.playerColor + '" src=https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/8/005/079/233/062b1d4.jpg> ' +
                             playerPos + '</div>');
                           //}//for
                           this.buildString();
@@ -117,7 +117,7 @@ setUpGame();
                         //var not = keyPressNum;
                         //var n = 0;
                         //var pressNum = n;
-                        $(window).on("keypress", function handleKeypress(event) {
+                        $(window).on("keyup", function handleKeypress(event) {
                           if(event.keyCode === (47 + playerPos)){
                             if(pressNum === (boardLength-1)){
                               $('#' + letter + pressNum).text(".");
@@ -129,8 +129,10 @@ setUpGame();
                               //resetKeypress(countPlayers);
                               //keyPressNum = 0;
                               $('.clear').text("_");
+//I could not get the board to reset properly
                               //$('#board').empty();
                               pressNum = 0;
+                              window.location.reload();
                               //key(0);
                               //setUpGame();
                               // console.log(pressNum);
@@ -143,7 +145,7 @@ setUpGame();
                             }else{
                               //$('#a' + count).append("b");
                               //$('#' + this.playerLetter + (count - 1)).empty();
-                              $('#' + letter + pressNum).text(".");
+                              $('#' + letter + pressNum).text(">");
                               $('#' + letter + (pressNum-1)).text("_");
                               //$('#' + letter + counter - 1).text(" ");
                               console.log('#' + letter + pressNum);
@@ -154,9 +156,48 @@ setUpGame();
                         });//keypress
                       };
 
-    this.movement = function() {
+    this.avatar = function() {
+                    $('#search-form').on("submit", function handleSubmit(event){
+                      //console.log('form submitted');
+                      event.preventDefault();
+                      //see the serialized info
+                      console.log("form serialized", $('#search-form').serialize());
 
-                    };//movement
+                      $.ajax({
+                        method: 'GET',
+                        url: 'https://api.spotify.com/v1/search',
+                        data: $('#search-form').serialize(),
+                        success: handleSuccessCallback,
+                        error: handleErrorCallback
+                      });
+
+                      function handleSuccessCallback(json){
+
+                      //json.tracks.items.forEach(function(event){
+                        //var trackName = event.name;
+                        var albumUrl = json.tracks.items[0].event.album.images[0].url;
+                        //console.log(json.tracks.items[0].album.images[0].url);
+                        //var resultsHtml = ;
+
+                        var source = $('#track-result-item').html();
+                        var template = Handlebars.compile(source);
+                        var resultsHtml = template({
+                          trackName: trackName,
+                          albumUrl: albumUrl
+                        });
+                        //$('#results').text("results coming soon");
+                        $('img#'+this.playerColor).attr(src, albumUrl);
+                        console.log(albumUrl);
+
+
+                      //});//forEach
+                      }
+                      function handleErrorCallback(){
+
+                      }
+                    }); //handleCallback
+
+                  };//movement
   }//Player
 
   // var count = 0;
