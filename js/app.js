@@ -104,7 +104,8 @@ setUpGame();
     this.buildString = function (){
                             for(var t = 0; t < boardLength; t++){
                               $('.'+this.playerColor).append('<div class="inline clear ' +
-                                this.playerLetter + '" id="' + letter + t + '">_</div>');
+                                this.playerLetter + '" id="' + letter + t + '">_______</div>');
+                                //<img id=a"'+letter+t+'" src="">');
                             }//for
                             //finish line
                             $('.'+this.playerColor).append('<div class="inline">|</div>');
@@ -121,14 +122,14 @@ setUpGame();
                           if(event.keyCode === (47 + playerPos)){
                             if(pressNum === (boardLength-1)){
                               $('#' + letter + pressNum).text(".");
-                              $('#' + letter + (pressNum-1)).text("_");
+                              $('#' + letter + (pressNum-1)).text("_______");
                               console.log(pressNum);
                               alert('player' + playerPos + ' has won!');
                               //$('#board').remove();
                               //$('.inline').remove();
                               //resetKeypress(countPlayers);
                               //keyPressNum = 0;
-                              $('.clear').text("_");
+                              $('.clear').text("_______");
 //I could not get the board to reset properly
                               //$('#board').empty();
                               pressNum = 0;
@@ -145,8 +146,10 @@ setUpGame();
                             }else{
                               //$('#a' + count).append("b");
                               //$('#' + this.playerLetter + (count - 1)).empty();
-                              $('#' + letter + pressNum).text(">");
-                              $('#' + letter + (pressNum-1)).text("_");
+                              //$('#a' + letter + pressNum).attr(src, "http://i.imgur.com/mRGbsfa.jpg");
+                              $('#' + letter + pressNum).append("<img class=avatar src=http://i.imgur.com/mRGbsfa.jpg>");
+                              //$('#' + letter + pressNum).text('>');
+                              $('#' + letter + (pressNum-1)).text("_______");
                               //$('#' + letter + counter - 1).text(" ");
                               console.log('#' + letter + pressNum);
                               pressNum++;
