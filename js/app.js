@@ -5,7 +5,7 @@ $(document).on('ready', function() {
   //self-building player objects
   var playersArr = [];
   var boardLength = 7;//put input here
-  var countPlayers = 5;//put input here
+  var countPlayers = 3;//put input here
   var Nums = 0;
 
   numPlayers(countPlayers);
@@ -132,7 +132,7 @@ setUpGame();
 //I could not get the board to reset properly
                               //$('#board').empty();
                               pressNum = 0;
-                              window.location.reload();
+                              //window.location.reload();
                               //key(0);
                               //setUpGame();
                               // console.log(pressNum);
